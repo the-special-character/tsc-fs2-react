@@ -1,62 +1,7 @@
-import { Component, createRef } from "react";
-import Child1 from "./child1";
-import Child2 from "./child2";
+import React from "react";
 
-const bgColor = "yellow";
-const clr = "black";
-
-// Mounting
-
-// 1. Constructor
-
-// updating
-
-// ->
-
-// unmounting
-
-// Error
-
-// let counter = 0;
-
-class App extends Component {
-  render() {
-    return (
-      <div>
-        <Child2 value={5} />
-      </div>
-    );
-  }
+function App() {
+  return <div>App</div>;
 }
-
-// App.getDerivedStateFromProps = (props, state) => {
-//   console.log("getDerivedStateFromProps", state);
-//   return {
-//     greetUser: `Hello ${props.name}`,
-//   };
-// };
-
-// const App = ({ name, designation }) => {
-//   return (
-//     <>
-//       <div>
-//         <h1
-//           className="cls"
-//           style={{
-//             backgroundColor: bgColor,
-//             color: clr,
-//             fontSize: 40,
-//           }}
-//         >
-//           {name}
-//         </h1>
-//         <h2>{designation}</h2>
-//       </div>
-//       <div>
-//         <input type="checkbox" />
-//       </div>
-//     </>
-//   );
-// };
 
 export default App;
