@@ -9,6 +9,9 @@ export default class Child1 extends PureComponent {
   //     // }
   //     // return false;
   //   }
+  state = {
+    counter: 0,
+  };
 
   componentDidMount() {
     document.addEventListener("mousemove", this.mouseMove);
@@ -26,9 +29,28 @@ export default class Child1 extends PureComponent {
     console.log("mouse move");
   };
 
+  increment = () => {
+    this.setState(({ counter }) => {
+      return {
+        counter: counter + 1,
+      };
+    });
+  };
+
   render() {
     console.log("child 1");
+    const { counter } = this.state;
+
     // const { counter } = this.props;
-    return <div>{`Child 1 `}</div>;
+    return (
+      <div>
+        <p>{`Child 1 `}</p>
+        <h1>{counter}</h1>
+        <button type="button" onClick={this.increment}>
+          {" "}
+          +
+        </button>
+      </div>
+    );
   }
 }
