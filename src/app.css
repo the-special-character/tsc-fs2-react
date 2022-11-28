@@ -1,0 +1,14 @@
+.wrapper {
+  @apply flex flex-col items-center;
+  & > .title {
+    @apply text-center m-10;
+  }
+  & > form {
+    & .txt-input {
+      @apply rounded-l-md;
+    }
+    & .btn {
+      @apply rounded-l-none;
+    }
+  }
+}
