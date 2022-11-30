@@ -1,13 +1,22 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, {
+  useRef,
+  useState,
+  useEffect,
+  useCallback,
+  useMemo,
+} from "react";
 import "./app.css";
 import AI from "./axioInstance";
+import TodoFilter from "./todoFilter";
+import TodoForm from "./todoForm";
+import TodoList from "./todoList";
 
 function App() {
   const todoTextRef = useRef("");
   const [todoList, setTodoList] = useState([]);
   const [filterType, setFilterType] = useState("all");
 
-  const loadTodo = async (ft) => {
+  const loadTodo = useCallback(async (ft) => {
     try {
       let url = "todoList";
       if (ft !== "all") {
@@ -17,13 +26,13 @@ function App() {
       setTodoList(res.data);
       setFilterType(ft);
     } catch (error) {}
-  };
+  }, []);
 
   useEffect(() => {
     loadTodo("all");
   }, []);
 
-  const addTodo = async (event) => {
+  const addTodo = useCallback(async (event) => {
     try {
       event.preventDefault();
       const todoText = todoTextRef.current.value;
@@ -34,9 +43,9 @@ function App() {
       setFilterType("all");
       todoTextRef.current.value = "";
     } catch (error) {}
-  };
+  }, []);
 
-  const toggleComplete = async (item) => {
+  const toggleComplete = useCallback(async (item) => {
     try {
       const res = await AI.put(`todoList/${item.id}`, {
         ...item,
@@ -48,9 +57,9 @@ function App() {
         return [...value.slice(0, index), res.data, ...value.slice(index + 1)];
       });
     } catch (error) {}
-  };
+  }, []);
 
-  const deleteTodo = async (item) => {
+  const deleteTodo = useCallback(async (item) => {
     try {
       await AI.delete(`todoList/${item.id}`);
       setTodoList((value) => {
@@ -58,62 +67,37 @@ function App() {
         return [...value.slice(0, index), ...value.slice(index + 1)];
       });
     } catch (error) {}
-  };
+  }, []);
 
-  console.log("hello");
+  const btns = useMemo(
+    () => [
+      {
+        name: "All",
+        value: "all",
+      },
+      {
+        name: "Pending",
+        value: "pending",
+      },
+      {
+        name: "Completed",
+        value: "completed",
+      },
+    ],
+    []
+  );
+
+  console.log("App");
   return (
     <div className="wrapper">
       <h1 className="title">Todo App</h1>
-      <form onSubmit={addTodo}>
-        <input type="text" className="txt-input" ref={todoTextRef} />
-        <button className="btn" type="submit">
-          Add Todo
-        </button>
-      </form>
-      <div className="w-full flex-1 overflow-auto">
-        {todoList.map((item) => {
-          return (
-            <div key={item.id} className="flex items-center m-8">
-              <input
-                type="checkbox"
-                checked={item.isDone}
-                onChange={() => toggleComplete(item)}
-              />
-              <p className="flex-1 px-8">{item.text}</p>
-              <button
-                type="button"
-                className="btn"
-                onClick={() => deleteTodo(item)}
-              >
-                Delete
-              </button>
-            </div>
-          );
-        })}
-      </div>
-      <div className="w-full flex">
-        <button
-          type="button"
-          onClick={() => loadTodo("all")}
-          className="btn flex-1 rounded-none"
-        >
-          All
-        </button>
-        <button
-          type="button"
-          onClick={() => loadTodo("pending")}
-          className="btn flex-1 rounded-none"
-        >
-          Pending
-        </button>
-        <button
-          type="button"
-          onClick={() => loadTodo("completed")}
-          className="btn flex-1 rounded-none"
-        >
-          Completed
-        </button>
-      </div>
+      <TodoForm addTodo={addTodo} ref={todoTextRef} />
+      <TodoList
+        todoList={todoList}
+        toggleComplete={toggleComplete}
+        deleteTodo={deleteTodo}
+      />
+      <TodoFilter loadTodo={loadTodo} btns={btns} />
     </div>
   );
 }
