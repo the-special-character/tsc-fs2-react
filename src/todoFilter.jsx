@@ -1,17 +1,17 @@
 import React, { memo } from "react";
 
-const TodoFilter = ({ btns, loadTodo }) => {
-  console.log("Todo Filter");
+const TodoFilter = ({ filterBtns, changeFilterType }) => {
+  console.log("TodoFilter render");
   return (
     <div className="w-full flex">
-      {btns.map((x) => (
+      {filterBtns.map((item) => (
         <button
-          key={x.value}
+          key={item.value}
           type="button"
-          onClick={() => loadTodo(x.value)}
+          onClick={() => changeFilterType(item.value)}
           className="btn flex-1 rounded-none"
         >
-          {x.name}
+          {item.text}
         </button>
       ))}
     </div>

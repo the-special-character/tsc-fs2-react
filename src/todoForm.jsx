@@ -1,11 +1,11 @@
 import React, { forwardRef, memo } from "react";
 
 const TodoForm = forwardRef(({ addTodo }, ref) => {
-  console.log("Todo Form");
+  console.log("TodoForm render");
   return (
     <form onSubmit={addTodo}>
-      <input type="text" className="txt-input" ref={ref} />
-      <button className="btn" type="submit">
+      <input className="txt-input" type="text" name="" id="" ref={ref} />
+      <button type="submit" className="btn">
         Add Todo
       </button>
     </form>

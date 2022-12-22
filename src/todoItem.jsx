@@ -1,16 +1,23 @@
 import React, { memo } from "react";
 
-const TodoItem = ({ item, toggleComplete, deleteTodo }) => {
-  console.log("Todo Item");
+const TodoItem = ({ toggleComplete, deleteTodo, item }) => {
+  console.log("Todo Item render");
   return (
-    <div key={item.id} className="flex items-center m-8">
+    <div className="flex items-center m-10">
       <input
         type="checkbox"
         checked={item.isDone}
         onChange={() => toggleComplete(item)}
       />
-      <p className="flex-1 px-8">{item.text}</p>
-      <button type="button" className="btn" onClick={() => deleteTodo(item)}>
+      <p
+        className="flex-1"
+        style={{
+          textDecoration: item.isDone ? "line-through" : "none",
+        }}
+      >
+        {item.text}
+      </p>
+      <button className="btn" type="button" onClick={() => deleteTodo(item)}>
         Delete
       </button>
     </div>

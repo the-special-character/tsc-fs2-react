@@ -2,7 +2,7 @@ import React, { memo } from "react";
 import TodoItem from "./todoItem";
 
 const TodoList = ({ todoList, toggleComplete, deleteTodo }) => {
-  console.log("Todo List");
+  console.log("TodoList render");
   return (
     <div className="w-full flex-1 overflow-auto">
       {todoList.map((item) => {
