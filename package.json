@@ -10,10 +10,14 @@
     "server": "json-server --watch db.json --port 3004"
   },
   "dependencies": {
+    "@headlessui/react": "^1.7.7",
+    "@heroicons/react": "^2.0.13",
     "axios": "^1.2.0",
+    "formik": "^2.2.9",
     "react": "^18.2.0",
     "react-addons-shallow-compare": "^15.6.3",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.6.1"
   },
   "devDependencies": {
     "@tailwindcss/forms": "^0.5.3",
