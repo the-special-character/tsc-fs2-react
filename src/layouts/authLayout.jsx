@@ -5,7 +5,7 @@ import { ThemeContext } from "../context/themeContext";
 const AuthLayout = () => {
   return (
     <div className="flex min-h-full items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-      <ThemeContext.Consumer>
+      {/* <ThemeContext.Consumer>
         {({ theme, toggleTheme }) => (
           <div>
             <p>{theme}</p>
@@ -14,7 +14,7 @@ const AuthLayout = () => {
             </button>
           </div>
         )}
-      </ThemeContext.Consumer>
+      </ThemeContext.Consumer> */}
       <div className="w-full max-w-md space-y-8">
         <div>
           <img

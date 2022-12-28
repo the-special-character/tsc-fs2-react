@@ -5,9 +5,9 @@ import { ThemeContext } from "../context/themeContext";
 const Login = () => {
   return (
     <>
-      <ThemeContext.Consumer>
+      {/* <ThemeContext.Consumer>
         {({ theme }) => <p>{theme}</p>}
-      </ThemeContext.Consumer>
+      </ThemeContext.Consumer> */}
       <form className="mt-8 space-y-6" action="#" method="POST">
         <input type="hidden" name="remember" defaultValue="true" />
         <div className="-space-y-px rounded-md shadow-sm">
