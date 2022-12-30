@@ -2,6 +2,9 @@ import React from "react";
 import { LockClosedIcon } from "@heroicons/react/20/solid";
 import { Field, Form, Formik } from "formik";
 import TextInput from "../components/textInput";
+import Select from "../components/select";
+import Checkbox from "../components/checkbox";
+import Radio from "../components/radio";
 
 const fields = [
   {
@@ -13,6 +16,51 @@ const fields = [
     className: "rounded-t-md",
     validate: (value) => {
       if (!value) return "Required...";
+      return "";
+    },
+  },
+  {
+    component: Radio,
+    id: "gander",
+    name: "gander",
+    autoComplete: "gender",
+    placeholder: "Please Select Gender from list",
+    options: [
+      {
+        id: "male",
+        label: "Male",
+      },
+      {
+        id: "female",
+        label: "Female",
+      },
+      {
+        id: "other",
+        label: "Other",
+      },
+    ],
+    validate: (value) => {
+      if (!value) return "Required...";
+      return "";
+    },
+  },
+  {
+    component: Checkbox,
+    id: "hobbies",
+    name: "hobbies",
+    placeholder: "Hobbies",
+    options: [
+      {
+        id: "cricket",
+        label: "Cricket",
+      },
+      {
+        id: "dance",
+        label: "Dance",
+      },
+    ],
+    validate: (value) => {
+      if (value.length === 0) return "Required...";
       return "";
     },
   },
@@ -81,6 +129,7 @@ const Register = () => {
         email: "",
         password: "",
         confirmPassword: "",
+        hobbies: [],
       }}
       onSubmit={(values) => {
         console.log(values);
