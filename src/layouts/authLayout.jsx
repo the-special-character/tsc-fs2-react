@@ -1,8 +1,17 @@
-import React from "react";
-import { Outlet } from "react-router-dom";
+import React, { useEffect } from "react";
+import { Outlet, useNavigate } from "react-router-dom";
 import { ThemeContext } from "../context/themeContext";
 
 const AuthLayout = () => {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = window.localStorage.getItem("token");
+    if (token) {
+      navigate("/");
+    }
+  }, []);
+
   return (
     <div className="flex min-h-full items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       {/* <ThemeContext.Consumer>

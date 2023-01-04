@@ -25,5 +25,28 @@
       "isDone": false,
       "id": 7
     }
+  ],
+  "users": [
+    {
+      "email": "yagnesh.modh@gmail.com",
+      "password": "$2a$10$hxEbOi.DB3xhtRNok7zbEuNMT0cQzNzj3z4lU4HNjkcahVsiHQOyO",
+      "name": "Yagnesh",
+      "age": 33,
+      "id": 1
+    },
+    {
+      "email": "yagnesh.modh1@gmail.com",
+      "password": "$2a$10$wvD4RmOEzQaqP.5GPHKLPeE2Tlc7t7OmfhwLHDJHdf/eNl29aZl4.",
+      "name": "YAGNESH MODH",
+      "age": 33,
+      "id": 2
+    },
+    {
+      "email": "dsp.ce28@gmail.com",
+      "password": "$2a$10$qv9t2rIgIV8wiMGCAVuAE.dkHrLHzZHu1liPAsf4xqKTAYp3ovRQ2",
+      "name": "YAGNESH MODH",
+      "age": 33,
+      "id": 3
+    }
   ]
 }

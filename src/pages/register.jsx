@@ -1,10 +1,7 @@
 import React from "react";
-import { LockClosedIcon } from "@heroicons/react/20/solid";
-import { Field, Form, Formik } from "formik";
 import TextInput from "../components/textInput";
-import Select from "../components/select";
-import Checkbox from "../components/checkbox";
-import Radio from "../components/radio";
+import { useNavigate } from "react-router-dom";
+import FormikForm from "../components/formikForm";
 
 const fields = [
   {
@@ -19,51 +16,51 @@ const fields = [
       return "";
     },
   },
-  {
-    component: Radio,
-    id: "gander",
-    name: "gander",
-    autoComplete: "gender",
-    placeholder: "Please Select Gender from list",
-    options: [
-      {
-        id: "male",
-        label: "Male",
-      },
-      {
-        id: "female",
-        label: "Female",
-      },
-      {
-        id: "other",
-        label: "Other",
-      },
-    ],
-    validate: (value) => {
-      if (!value) return "Required...";
-      return "";
-    },
-  },
-  {
-    component: Checkbox,
-    id: "hobbies",
-    name: "hobbies",
-    placeholder: "Hobbies",
-    options: [
-      {
-        id: "cricket",
-        label: "Cricket",
-      },
-      {
-        id: "dance",
-        label: "Dance",
-      },
-    ],
-    validate: (value) => {
-      if (value.length === 0) return "Required...";
-      return "";
-    },
-  },
+  // {
+  //   component: Radio,
+  //   id: "gander",
+  //   name: "gander",
+  //   autoComplete: "gender",
+  //   placeholder: "Please Select Gender from list",
+  //   options: [
+  //     {
+  //       id: "male",
+  //       label: "Male",
+  //     },
+  //     {
+  //       id: "female",
+  //       label: "Female",
+  //     },
+  //     {
+  //       id: "other",
+  //       label: "Other",
+  //     },
+  //   ],
+  //   validate: (value) => {
+  //     if (!value) return "Required...";
+  //     return "";
+  //   },
+  // },
+  // {
+  //   component: Checkbox,
+  //   id: "hobbies",
+  //   name: "hobbies",
+  //   placeholder: "Hobbies",
+  //   options: [
+  //     {
+  //       id: "cricket",
+  //       label: "Cricket",
+  //     },
+  //     {
+  //       id: "dance",
+  //       label: "Dance",
+  //     },
+  //   ],
+  //   validate: (value) => {
+  //     if (value.length === 0) return "Required...";
+  //     return "";
+  //   },
+  // },
   {
     component: TextInput,
     id: "age",
@@ -122,45 +119,46 @@ const fields = [
 ];
 
 const Register = () => {
+  const navigate = useNavigate();
+
   return (
-    <Formik
+    <FormikForm
+      fields={fields}
       initialValues={{
         name: "",
         email: "",
+        age: "",
         password: "",
         confirmPassword: "",
-        hobbies: [],
       }}
-      onSubmit={(values) => {
-        console.log(values);
+      onSubmit={async (values, actions) => {
+        try {
+          console.log(actions);
+          const { confirmPassword, ...rest } = values;
+          console.log(rest);
+          const res = await fetch("http://localhost:3004/register", {
+            method: "POST",
+            body: JSON.stringify(rest),
+            headers: {
+              "Content-Type": "application/json",
+              Accept: "application/json",
+            },
+          });
+          const json = await res.json();
+          if (!res.ok) {
+            throw new Error(json);
+          }
+          window.localStorage.setItem("token", JSON.stringify(json));
+          actions.resetForm();
+          navigate("/");
+        } catch (error) {
+          actions.setErrors({
+            serverError: error.message,
+          });
+        }
       }}
-    >
-      {() => (
-        <Form className="mt-8 space-y-6">
-          <input type="hidden" name="remember" defaultValue="true" />
-          <div className="-space-y-px rounded-md shadow-sm">
-            {fields.map((x) => (
-              <Field key={x.id} {...x} />
-            ))}
-          </div>
-
-          <div>
-            <button
-              type="submit"
-              className="group relative flex w-full justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-            >
-              <span className="absolute inset-y-0 left-0 flex items-center pl-3">
-                <LockClosedIcon
-                  className="h-5 w-5 text-indigo-500 group-hover:text-indigo-400"
-                  aria-hidden="true"
-                />
-              </span>
-              Sign up
-            </button>
-          </div>
-        </Form>
-      )}
-    </Formik>
+      btnText="Sign up"
+    />
   );
 };
 

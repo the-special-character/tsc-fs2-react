@@ -3,6 +3,10 @@ import { LockClosedIcon } from "@heroicons/react/20/solid";
 import { ThemeContext } from "../context/themeContext";
 import { Field, Form, Formik } from "formik";
 import TextInput from "../components/textInput";
+import Checkbox from "../components/checkbox";
+import { useNavigate } from "react-router-dom";
+import FormikForm from "../components/formikForm";
+import { useEffect } from "react";
 
 const fields = [
   {
@@ -33,76 +37,70 @@ const fields = [
       return "";
     },
   },
+  {
+    component: Checkbox,
+    name: "rememberMe",
+    options: [
+      {
+        id: "rememberMe",
+        label: "Remember Me",
+      },
+    ],
+  },
 ];
 
 const Login = () => {
+  const navigate = useNavigate();
+
   return (
-    <>
-      {/* <ThemeContext.Consumer>
-        {({ theme }) => <p>{theme}</p>}
-      </ThemeContext.Consumer> */}
-      <Formik
-        initialValues={{
-          email: "",
-          password: "",
-        }}
-        onSubmit={(values) => {
-          console.log(values);
-        }}
-      >
-        {() => (
-          <Form className="mt-8 space-y-6">
-            <input type="hidden" name="remember" defaultValue="true" />
-            <div className="-space-y-px rounded-md shadow-sm">
-              {fields.map((x) => (
-                <Field key={x.id} {...x} />
-              ))}
-            </div>
+    <FormikForm
+      fields={fields.slice(0, 2)}
+      initialValues={{
+        email: "",
+        password: "",
+        rememberMe: [],
+      }}
+      onSubmit={async (values, actions) => {
+        try {
+          console.log(actions);
+          const { rememberMe, ...rest } = values;
+          console.log(rest);
+          const res = await fetch("http://localhost:3004/login", {
+            method: "POST",
+            body: JSON.stringify(rest),
+            headers: {
+              "Content-Type": "application/json",
+              Accept: "application/json",
+            },
+          });
+          const json = await res.json();
+          if (!res.ok) {
+            throw new Error(json);
+          }
+          window.localStorage.setItem("token", JSON.stringify(json));
+          actions.resetForm();
+          navigate("/");
+        } catch (error) {
+          actions.setErrors({
+            serverError: error.message,
+          });
+        }
+      }}
+      btnText="Sign in"
+    >
+      <div className="flex items-center justify-between">
+        <Field {...fields.find((x) => x.name === "rememberMe")} />
 
-            <div className="flex items-center justify-between">
-              <div className="flex items-center">
-                <input
-                  id="remember-me"
-                  name="remember-me"
-                  type="checkbox"
-                  className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-                />
-                <label
-                  htmlFor="remember-me"
-                  className="ml-2 block text-sm text-gray-900"
-                >
-                  Remember me
-                </label>
-              </div>
-
-              <div className="text-sm">
-                <a
-                  href="#"
-                  className="font-medium text-indigo-600 hover:text-indigo-500"
-                >
-                  Forgot your password?
-                </a>
-              </div>
-            </div>
-
-            <div>
-              <button
-                type="submit"
-                className="group relative flex w-full justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-              >
-                <span className="absolute inset-y-0 left-0 flex items-center pl-3">
-                  <LockClosedIcon
-                    className="h-5 w-5 text-indigo-500 group-hover:text-indigo-400"
-                    aria-hidden="true"
-                  />
-                </span>
-                Sign in
-              </button>
-            </div>
-          </Form>
-        )}
-      </Formik>
-    </>
+        <div className="text-sm">
+          <a
+            href="#"
+            className="font-medium text-indigo-600 hover:text-indigo-500"
+          >
+            Forgot your password?
+          </a>
+        </div>
+      </div>
+    </FormikForm>
   );
 };
 
