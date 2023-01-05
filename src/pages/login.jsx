@@ -7,6 +7,8 @@ import Checkbox from "../components/checkbox";
 import { useNavigate } from "react-router-dom";
 import FormikForm from "../components/formikForm";
 import { useEffect } from "react";
+import { useContext } from "react";
+import { AuthContext } from "../context/authContext";
 
 const fields = [
   {
@@ -50,7 +52,7 @@ const fields = [
 ];
 
 const Login = () => {
-  const navigate = useNavigate();
+  const { login } = useContext(AuthContext);
 
   return (
     <FormikForm
@@ -60,32 +62,7 @@ const Login = () => {
         password: "",
         rememberMe: [],
       }}
-      onSubmit={async (values, actions) => {
-        try {
-          console.log(actions);
-          const { rememberMe, ...rest } = values;
-          console.log(rest);
-          const res = await fetch("http://localhost:3004/login", {
-            method: "POST",
-            body: JSON.stringify(rest),
-            headers: {
-              "Content-Type": "application/json",
-              Accept: "application/json",
-            },
-          });
-          const json = await res.json();
-          if (!res.ok) {
-            throw new Error(json);
-          }
-          window.localStorage.setItem("token", JSON.stringify(json));
-          actions.resetForm();
-          navigate("/");
-        } catch (error) {
-          actions.setErrors({
-            serverError: error.message,
-          });
-        }
-      }}
+      onSubmit={login}
       btnText="Sign in"
     >
       <div className="flex items-center justify-between">

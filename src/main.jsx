@@ -16,6 +16,7 @@ import Register from "./pages/register";
 import MainLayout from "./layouts/mainLayout";
 import AuthLayout from "./layouts/authLayout";
 import { ThemeProvider } from "./context/themeContext";
+import { AuthProvider } from "./context/authContext";
 
 // const router = createBrowserRouter([
 //   {
@@ -52,9 +53,11 @@ const router = createBrowserRouter(
 );
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <ThemeProvider>
-    <ErrorBoundary>
-      <RouterProvider router={router} />
-    </ErrorBoundary>
-  </ThemeProvider>
+  <AuthProvider>
+    <ThemeProvider>
+      <ErrorBoundary>
+        <RouterProvider router={router} />
+      </ErrorBoundary>
+    </ThemeProvider>
+  </AuthProvider>
 );

@@ -119,7 +119,7 @@ const fields = [
 ];
 
 const Register = () => {
-  const navigate = useNavigate();
+  const { register } = useContext(AuthContext);
 
   return (
     <FormikForm
@@ -131,32 +131,7 @@ const Register = () => {
         password: "",
         confirmPassword: "",
       }}
-      onSubmit={async (values, actions) => {
-        try {
-          console.log(actions);
-          const { confirmPassword, ...rest } = values;
-          console.log(rest);
-          const res = await fetch("http://localhost:3004/register", {
-            method: "POST",
-            body: JSON.stringify(rest),
-            headers: {
-              "Content-Type": "application/json",
-              Accept: "application/json",
-            },
-          });
-          const json = await res.json();
-          if (!res.ok) {
-            throw new Error(json);
-          }
-          window.localStorage.setItem("token", JSON.stringify(json));
-          actions.resetForm();
-          navigate("/");
-        } catch (error) {
-          actions.setErrors({
-            serverError: error.message,
-          });
-        }
-      }}
+      onSubmit={register}
       btnText="Sign up"
     />
   );
