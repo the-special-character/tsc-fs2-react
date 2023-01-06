@@ -2,6 +2,7 @@ import React, { createContext, useState } from "react";
 import { useEffect } from "react";
 import { useMemo } from "react";
 import { useCallback } from "react";
+import axiosInstance from "../utils/axiosInstance";
 
 export const AuthContext = createContext();
 
@@ -20,23 +21,12 @@ export const AuthProvider = ({ children }) => {
       console.log(actions);
       const { confirmPassword, ...rest } = values;
       console.log(rest);
-      const res = await fetch("http://localhost:3004/register", {
-        method: "POST",
-        body: JSON.stringify(rest),
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-      });
-      const json = await res.json();
-      if (!res.ok) {
-        throw new Error(json);
-      }
-      window.localStorage.setItem("token", JSON.stringify(json));
-      setUser(json);
+      const res = await axiosInstance.post("register", rest);
+      window.localStorage.setItem("token", JSON.stringify(res));
+      setUser(res);
       actions.resetForm();
-      //   navigate("/");
     } catch (error) {
+      console.log(JSON.stringify(error));
       actions.setErrors({
         serverError: error.message,
       });
@@ -48,22 +38,10 @@ export const AuthProvider = ({ children }) => {
       console.log(actions);
       const { rememberMe, ...rest } = values;
       console.log(rest);
-      const res = await fetch("http://localhost:3004/login", {
-        method: "POST",
-        body: JSON.stringify(rest),
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-      });
-      const json = await res.json();
-      if (!res.ok) {
-        throw new Error(json);
-      }
-      window.localStorage.setItem("token", JSON.stringify(json));
+      const res = await axiosInstance.post("login", rest);
+      window.localStorage.setItem("token", JSON.stringify(res));
+      setUser(res);
       actions.resetForm();
-      setUser(json);
-      //   navigate("/");
     } catch (error) {
       actions.setErrors({
         serverError: error.message,
