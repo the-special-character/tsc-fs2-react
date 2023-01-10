@@ -18,6 +18,7 @@ import AuthLayout from "./layouts/authLayout";
 import { ThemeProvider } from "./context/themeContext";
 import { AuthProvider } from "./context/authContext";
 import { ProductProvider } from "./context/productsContext";
+import { CartProvider } from "./context/cartContext";
 
 // const router = createBrowserRouter([
 //   {
@@ -45,7 +46,9 @@ const router = createBrowserRouter(
         path="/"
         element={
           <ProductProvider>
-            <MainLayout />
+            <CartProvider>
+              <MainLayout />
+            </CartProvider>
           </ProductProvider>
         }
       >

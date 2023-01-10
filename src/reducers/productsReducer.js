@@ -1,3 +1,5 @@
+import cartReducer from "./cartReducer";
+
 export const productsInitialState = {
   products: [],
   loading: false,

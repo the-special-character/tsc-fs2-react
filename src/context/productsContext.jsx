@@ -7,10 +7,14 @@ import {
   productsReducer,
 } from "../reducers/productsReducer";
 import { useMemo } from "react";
+import { useContext } from "react";
+import { AuthContext } from "./authContext";
 
 export const ProductContext = createContext();
 
 export const ProductProvider = ({ children }) => {
+  const { logOut } = useContext(AuthContext);
+
   const [productsState, dispatch] = useReducer(
     productsReducer,
     productsInitialState
@@ -23,6 +27,9 @@ export const ProductProvider = ({ children }) => {
       dispatch({ type: "LOAD_PRODUCTS_SUCCESS", payload: res });
     } catch (error) {
       dispatch({ type: "LOAD_PRODUCTS_FAIL", payload: error });
+      if (error.message === "Please Log in again") {
+        logOut();
+      }
     }
   }, []);
 
