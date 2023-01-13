@@ -6,6 +6,7 @@ import {
   XMarkIcon,
   ShoppingBagIcon,
 } from "@heroicons/react/24/outline";
+import { connect } from "react-redux";
 import { AuthContext } from "../context/authContext";
 import { CartContext } from "../context/cartContext";
 import { ProductContext } from "../context/productsContext";
@@ -21,11 +22,11 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-const Header = () => {
+const Header = ({ cart: { cart }, products: { products }, deleteCart }) => {
   const [open, setOpen] = useState(false);
   const { logOut } = useContext(AuthContext);
-  const { cartState, deleteCart } = useContext(CartContext);
-  const { productsState } = useContext(ProductContext);
+  // const { cartState, } = useContext(CartContext);
+  // const { productsState } = useContext(ProductContext);
 
   return (
     <>
@@ -86,7 +87,7 @@ const Header = () => {
                   >
                     <ShoppingBagIcon className="h-6 w-6" aria-hidden="true" />
                     <span>
-                      {cartState.cart.reduce((p, c) => {
+                      {cart.reduce((p, c) => {
                         return p + c.quantity;
                       }, 0)}
                     </span>
@@ -237,8 +238,8 @@ const Header = () => {
                               role="list"
                               className="-my-6 divide-y divide-gray-200"
                             >
-                              {cartState.cart.map((cartItem) => {
-                                const product = productsState.products.find(
+                              {cart.map((cartItem) => {
+                                const product = products.find(
                                   (x) => x.id === cartItem.productId
                                 );
                                 return (
@@ -299,8 +300,8 @@ const Header = () => {
                               currency: "USD",
                               style: "currency",
                             }).format(
-                              cartState.cart.reduce((p, c) => {
-                                const product = productsState.products.find(
+                              cart.reduce((p, c) => {
+                                const product = products.find(
                                   (x) => x.id === c.productId
                                 );
                                 return p + product.price * c.quantity;
@@ -345,4 +346,17 @@ const Header = () => {
   );
 };
 
-export default Header;
+const mapStateToProps = (state) => {
+  return {
+    products: state.products,
+    cart: state.cart,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    deleteCart: (data) => deleteCart(data)(dispatch),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Header);

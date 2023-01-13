@@ -4,7 +4,7 @@ export const cartInitialState = {
   cart: [],
 };
 
-export default (state, { type, payload }) => {
+export default (state = cartInitialState, { type, payload }) => {
   switch (type) {
     case "LOAD_CART_REQUEST":
     case "ADD_CART_REQUEST":

@@ -2,9 +2,8 @@ import React, { createContext } from "react";
 import { useCallback } from "react";
 import axiosInstance from "../utils/axiosInstance";
 import { useReducer } from "react";
-import {
+import productsReducer, {
   productsInitialState,
-  productsReducer,
 } from "../reducers/productsReducer";
 import { useMemo } from "react";
 import { useContext } from "react";

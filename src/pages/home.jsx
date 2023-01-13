@@ -1,40 +1,56 @@
 import React, { useContext } from "react";
 import { ProductContext } from "../context/productsContext";
+import { connect } from "react-redux";
 import { useEffect } from "react";
 import { StarIcon } from "@heroicons/react/20/solid";
 import { CartContext } from "../context/cartContext";
 import { Field, Form, Formik } from "formik";
+import { loadProducts } from "../actions/productsAction";
+import {
+  addCart,
+  deleteCart,
+  loadCart,
+  updateCart,
+} from "../actions/cartAction";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-const Home = () => {
-  const {
-    productsState: { products, loading, error },
-    loadProducts,
-  } = useContext(ProductContext);
+const Home = ({
+  products: { products, loading: productsLoading, error: productsError },
+  cart: { cart, loading: cartLoading, error: cartError },
+  loadProducts,
+  loadCart,
+  addCart,
+  updateCart,
+  deleteCart,
+}) => {
+  // const {
+  //   productsState: { products, loading, error },
+  //   loadProducts,
+  // } = useContext(ProductContext);
 
-  const { cartState, loadCart, addCart, updateCart, deleteCart } =
-    useContext(CartContext);
+  // const { cartState, loadCart, addCart, updateCart, deleteCart } =
+  //   useContext(CartContext);
 
   useEffect(() => {
     loadProducts();
     loadCart();
   }, []);
 
-  if (loading) {
+  if (productsLoading || cartLoading) {
     return <h1>Loading...</h1>;
   }
 
-  if (error) {
+  if (productsError || cartError) {
     return <h1>{error?.message}</h1>;
   }
 
   return (
     <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8 grid gap-y-8">
       {products.map((product) => {
-        const cartItem = cartState.cart.find((x) => x.productId === product.id);
+        const cartItem = cart.find((x) => x.productId === product.id);
         console.log(cartItem);
         return (
           <div
@@ -208,4 +224,21 @@ const Home = () => {
   );
 };
 
-export default Home;
+const mapStateToProps = (state) => {
+  return {
+    products: state.products,
+    cart: state.cart,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    loadProducts: () => loadProducts()(dispatch),
+    loadCart: () => loadCart()(dispatch),
+    addCart: (data) => addCart(data)(dispatch),
+    updateCart: (data) => updateCart(data)(dispatch),
+    deleteCart: (data) => deleteCart(data)(dispatch),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Home);

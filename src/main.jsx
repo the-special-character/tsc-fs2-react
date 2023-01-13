@@ -1,6 +1,5 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import App from "./app";
 import ErrorBoundary from "./ErrorBoundary";
 import {
   Route,
@@ -19,6 +18,9 @@ import { ThemeProvider } from "./context/themeContext";
 import { AuthProvider } from "./context/authContext";
 import { ProductProvider } from "./context/productsContext";
 import { CartProvider } from "./context/cartContext";
+import { Provider } from "react-redux";
+import { createStore } from "redux";
+import rootReducers from "./reducers";
 
 // const router = createBrowserRouter([
 //   {
@@ -42,16 +44,7 @@ import { CartProvider } from "./context/cartContext";
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
-      <Route
-        path="/"
-        element={
-          <ProductProvider>
-            <CartProvider>
-              <MainLayout />
-            </CartProvider>
-          </ProductProvider>
-        }
-      >
+      <Route path="/" element={<MainLayout />}>
         <Route index element={<Home />} />
         <Route path="products" element={<Products />} />
       </Route>
@@ -63,12 +56,17 @@ const router = createBrowserRouter(
   )
 );
 
+const store = createStore(
+  rootReducers,
+  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+);
+
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <AuthProvider>
-    <ThemeProvider>
+  <Provider store={store}>
+    <AuthProvider>
       <ErrorBoundary>
         <RouterProvider router={router} />
       </ErrorBoundary>
-    </ThemeProvider>
-  </AuthProvider>
+    </AuthProvider>
+  </Provider>
 );
